@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-
+import { toast } from "react-toastify";
+import { loginApi } from "../api/auth";
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
@@ -7,14 +8,23 @@ export const AuthContextProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("user")) || null
   );
 
-  const login = () => {
+  const login = async (data) => {
+     await loginApi(data)
+          .then(res => {
+            const  { id, name , profilePic}  = res.data
+            setCurrentUser({
+              id,
+              name,
+              profilePic
+            });
+            window.location.href = '/';
+            toast.success("Successfully logged in!!");
+        })
+          .catch(err => {
+            toast.error(err.data);
+        });
     //TO DO
-    setCurrentUser({
-      id: 1,
-      name: "John Doe",
-      profilePic:
-        "https://images.pexels.com/photos/3228727/pexels-photo-3228727.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    });
+    
   };
 
   useEffect(() => {

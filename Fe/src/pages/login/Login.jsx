@@ -1,13 +1,19 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
+import { useForm } from "react-hook-form";
 import "./login.scss";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleLogin = () => {
-    login();
+  const onSubmit = (data) => {
+    login(data);
   };
 
   return (
@@ -27,10 +33,10 @@ const Login = () => {
         </div>
         <div className="right">
           <h1>Login</h1>
-          <form>
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
-            <button onClick={handleLogin}>Login</button>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input type="text"  {...register("username", { required: "Username is required" })} placeholder="Username" />
+            <input type="password" {...register("password", { required: "Password is required" })} placeholder="Password" />
+            <button type="submit">Login</button>
           </form>
         </div>
       </div>

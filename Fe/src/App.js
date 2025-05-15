@@ -16,6 +16,8 @@ import "./style.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
+import { Circles } from "react-loader-spinner";
+import { useSelector } from "react-redux";
 
 function App() {
   const {currentUser} = useContext(AuthContext);
@@ -74,8 +76,15 @@ function App() {
     },
   ]);
 
+  const isLoading = useSelector((state) => state.loading.isLoading);
   return (
     <div>
+      {isLoading &&
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.3)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Circles height={80} width={80} color="#938eef" />
+        </div>
+      }
+     
       <RouterProvider router={router} />
     </div>
   );
